@@ -109,7 +109,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
       <Wrapper>
         <div className="flex flex-col w-full">
           <div className="w-full flex flex-col">
-            <div className="h-auto min-h-[400px] w-full relative bg-slate-200 py-4 px-0">
+            <div className="h-auto min-h-[400px] w-full relative backdrop-blur-xl bg-slate-200/80 py-4 px-0">
               <h1 className="absolute inset-0 grid place-content-center font-semibold text-3xl md:text-4xl lg:text-5xl px-8 text-center">
                 {post?.title}
               </h1>
@@ -118,7 +118,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
               </span>
             </div>
 
-            <div className="pl-4 pt-10 pb-6 text-left font-normal text-lg w-full overflow-hidden ">
+            <div className="pl-4 pt-10 pb-6 text-left font-normal w-full overflow-hidden ">
               {post?.content}
             </div>
             <div className="py-4 pl-4 text-left flex flex-col items-start">
@@ -135,52 +135,55 @@ const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
                 />
               ) : null}
             </div>
-            <div className=" flex overflow-x-scroll h-auto w-full px-4 gap-12 ">
-              {post?.comments && post?.comments.length > 0
-                ? post?.comments.map((comment, key) => (
-                    <div
-                      key={key}
-                      className="relative w-[320px] h-[200px] border border-slate-200 rounded-md p-4 overflow-hidden  "
-                    >
-                      <div className="w-full absolute inset-0 py-2 px-1 text-xs">
-                        {comment?.content}
-                      </div>
-                      <span className="w-auto absolute bottom-0 right-0 text-xs   ">
-                        ...{comment?.author}
-                      </span>
-                      {comment?.author === session?.user?.user?.username ? (
-                        <div className="absolute top-0 right-0 p-1 w-auto h-auto flex">
-                          <Button
-                            variant="ghost"
-                            className="cursor-pointer bg-white rounded-full w-12  h-12  hover:bg-slate-500 z-10 absolute top-0 right-0 grid place-content-center"
-                            onMouseEnter={() => {
-                              setShowOptions(key);
-                            }}
-                           
-                          >
-                            <MoreHorizontal className="rotate-90" />
-                          </Button>
-                          {showOptions === key ? (
-                            <div
-                            onMouseLeave={()=>{
-                              setShowOptions(null)
-                            }}
-                             className="grid place-content-center overflow-hidden gap-y-1 pl-2  bg-white border border-slate-400 py-4 pr-4 rounded-md absolute top-0 right-0 w-20 h-32">
-                              <button
-                                onClick={() => {
-                                  handleDelete(comment?.id);
-                                }}
-                                className=" text-left w-full text-red-300 hover:bg-gray-200 px-2"
-                              >
-                                Delete
-                              </button>{" "}
-                            </div>
-                          ) : null}
+            <div className=" flex  h-auto w-full overflow-hidden px-4 ">
+              <div className="w-full overflow-x-scroll flex  gap-12 py-4 ">
+                {" "}
+                {post?.comments && post?.comments.length > 0
+                  ? post?.comments.map((comment, key) => (
+                      <div
+                        key={key}
+                        className="relative flex min-w-[320px] h-[200px] border border-slate-200 rounded-md p-4 overflow-hidden  "
+                      >
+                        <div className="w-full absolute inset-0 py-2 px-1 text-xs">
+                          {comment?.content}
                         </div>
-                      ) : null}
-                    </div>
-                  ))
-                : null}
+                        <span className="w-auto absolute bottom-0 right-0 text-xs   ">
+                          ...{comment?.author}
+                        </span>
+                        {comment?.author === session?.user?.user?.username ? (
+                          <div className="absolute top-0 right-0 p-1 w-auto h-auto flex">
+                            <Button
+                              variant="ghost"
+                              className="cursor-pointer bg-white rounded-full w-12  h-12  hover:bg-slate-500 z-10 absolute top-0 right-0 grid place-content-center"
+                              onMouseEnter={() => {
+                                setShowOptions(key);
+                              }}
+                            >
+                              <MoreHorizontal className="rotate-90" />
+                            </Button>
+                            {showOptions === key ? (
+                              <div
+                                onMouseLeave={() => {
+                                  setShowOptions(null);
+                                }}
+                                className="grid place-content-center overflow-hidden gap-y-1 pl-2  bg-white border border-slate-400 py-4 pr-4 rounded-md absolute top-0 right-0 w-20 h-32"
+                              >
+                                <button
+                                  onClick={() => {
+                                    handleDelete(comment?.id);
+                                  }}
+                                  className=" text-left w-full text-red-300 hover:bg-gray-200 px-2"
+                                >
+                                  Delete
+                                </button>{" "}
+                              </div>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </div>
+                    ))
+                  : null}
+              </div>
             </div>
           </div>
         </div>

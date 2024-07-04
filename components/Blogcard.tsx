@@ -51,7 +51,7 @@ const BlogCard = ({ post }: { post: Post }) => {
     <Card className="relative w-full gap-y-8 h-auto min-h-[320px] overflow-hidden">
       <CardHeader className="w-full h-auto">
         <div className="flex w-full justify-between items-center relative">
-          <CardTitle>{title}</CardTitle>
+          <CardTitle className="text-lg">{title}</CardTitle>
           <Button
             variant="ghost"
             className="cursor-pointer z-10"
@@ -60,7 +60,7 @@ const BlogCard = ({ post }: { post: Post }) => {
             <MoreHorizontal className="rotate-90" />
           </Button>
           {show ? (
-            <div className="flex flex-col gap-y-1  pt-8 pb-12 pl-2 items-start bg-white border border-slate-400 py-4 pr-4 rounded-md absolute top-0 right-0 w-32 h-32">
+            <div className="flex flex-col gap-y-1 border-l border-b border-slate-300  pt-8 pb-12 pl-2  items-start bg-white  py-4 pr-4 rounded-md absolute top-0 right-0 w-32 h-32">
               <button
                 onClick={handleEdit}
                 className=" text-left w-full hover:bg-gray-200 px-2"
@@ -89,7 +89,7 @@ const BlogCard = ({ post }: { post: Post }) => {
           alt={title}
           className="w-full h-40 object-cover mb-4 rounded-md"
         /> */}
-        <p>{content?.slice(0, 100)}...</p>
+        <p className="font-light text-sm text-left ">{content?.slice(0, 300)}...</p>
       </CardContent>
       {/* <CardFooter>
         <Button onClick={handleView} variant="primary">Read More</Button>

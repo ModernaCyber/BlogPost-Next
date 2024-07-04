@@ -40,6 +40,9 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId, author }) => {
       });
 
       alert("Comment submitted successfully");
+      setFormData({
+        content: "",
+      });
       router.push(`/blog/${postId}`);
     } catch (error: any) {
       setError(error.message);
@@ -60,6 +63,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId, author }) => {
           name="content"
           value={formData.content}
           onChange={handleChange}
+          placeholder="Leave a comment..."
           rows={6}
           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           required

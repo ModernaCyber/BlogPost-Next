@@ -55,7 +55,7 @@ const EditBlogForm = ({ blog }: { blog: BlogFormData }) => {
       }
 
       const response = await axiosAuth.put(
-        `//api/posts/${formData.id}`,
+        `/api/posts/${formData.id}/`,
         formDataToSend
       );
 
@@ -80,7 +80,7 @@ const EditBlogForm = ({ blog }: { blog: BlogFormData }) => {
           type="text"
           name="author"
           value={formData.author || ""}
-          onChange={handleChange}
+          // onChange={handleChange}
           required
           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />

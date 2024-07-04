@@ -6,7 +6,7 @@ import useAxiosAuth from "lib/hooks/useAxiosAuth";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { Search } from "lucide-react"; // Import the Search icon from lucide-react
+import { ChevronsLeft, ChevronsRight, Search } from "lucide-react"; // Import the Search icon from lucide-react
 
 interface Post {
   id?: string;
@@ -76,7 +76,7 @@ const HomePage = () => {
         {posts.length === 0 ? (
           <div>No blogs at the moment</div>
         ) : (
-          <div className="flex flex-col w-full h-auto">
+          <div className="flex flex-col w-full h-auto pt-4 gap-y-6 pb-10 min-h-dvh">
             <div className="mb-4 flex items-center">
               <Search className="mr-2" />
               <input
@@ -92,16 +92,18 @@ const HomePage = () => {
                 <BlogCard post={post} key={key} />
               ))}
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mt-auto">
               <button
                 onClick={handlePrevPage}
                 disabled={currentPage === 1}
-                className={`px-4 py-2 rounded ${
+                className={`px-4 py-2 rounded flex gap-x-1 items-center ${
                   currentPage === 1
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                     : "bg-blue-500 text-white"
                 }`}
               >
+                <ChevronsLeft />
+                {" "}
                 Previous
               </button>
               <span>
@@ -110,13 +112,15 @@ const HomePage = () => {
               <button
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded ${
+                className={`px-4 py-2 rounded flex gap-x-1 items-center ${
                   currentPage === totalPages
                     ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-blue-500 text-white"
+                    : "bg-slate-900 text-white py-2 px-4 rounded"
                 }`}
               >
                 Next
+                {" "}
+                <ChevronsRight />
               </button>
             </div>
           </div>

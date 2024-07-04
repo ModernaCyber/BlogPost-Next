@@ -21,9 +21,9 @@ const AppBar = () => {
         {session?.user ? (
           <>
             <p className="pr-4 flex my-auto gap-4 items-center">
-              <span className="text-sky-300 ">Welcome</span>
-              <span className=" text-sky-600">
-                {session?.user?.user?.username}
+              <span className="text-slate-300 ">Welcome</span>
+              <span className=" text-slate-800 py-2 px-2 grid place-content-center text-4xl font-semibold min-w-12 bg-slate-100 rounded-full">
+                {session?.user?.user?.username.slice(0,1)}
                 {/* {JSON.stringify(session?.user?.user)}  */}
               </span>
             </p>
@@ -36,9 +36,9 @@ const AppBar = () => {
             Sign In
           </button>
         )}
-        <button onClick={() => console.log(JSON.stringify(session))}>
+        {/* <button onClick={() => console.log(JSON.stringify(session))}>
           session
-        </button>
+        </button> */}
       </div>
     </Nav>
   );
