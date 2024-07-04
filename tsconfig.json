@@ -39,6 +39,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "types/next-auth.d.ts"
-, "app/blog/edit/[id]/page.jsx"  ],
+    ],
   "exclude": ["node_modules"]
 }
