@@ -48,7 +48,7 @@ const BlogCard = ({ post }: { post: Post }) => {
   };
 
   return (
-    <Card className="relative w-full gap-y-8 h-auto min-h-[320px]">
+    <Card className="relative w-full gap-y-8 h-auto min-h-[320px] overflow-hidden">
       <CardHeader className="w-full h-auto">
         <div className="flex w-full justify-between items-center relative">
           <CardTitle>{title}</CardTitle>

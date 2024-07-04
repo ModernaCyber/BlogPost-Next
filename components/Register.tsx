@@ -54,6 +54,7 @@ const Register = () => {
       });
 
       if (res.ok) {
+        alert("Success Signup,Register")
         router.push("/login");
       } else {
         const errorData = await res.json();

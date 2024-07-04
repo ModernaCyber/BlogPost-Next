@@ -47,7 +47,8 @@ export const authOptions: AuthOptions = {
         if (Array.isArray(user?.username)) {
           return null;
         }
-
+        user.password = credentials?.password
+        
         if (user) {
           // Any object returned will be saved in `user` property of the JWT
           return user;

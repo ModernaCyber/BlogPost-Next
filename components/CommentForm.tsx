@@ -33,7 +33,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ postId, author }) => {
     setError(null);
 
     try {
-      const response = await axiosAuth.put(`/api/comments/`, {
+      const response = await axiosAuth.post(`/api/comments/`, {
         ...formData,
         author,
         post: postId,

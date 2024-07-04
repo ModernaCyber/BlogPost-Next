@@ -17,23 +17,26 @@ async function refreshToken(refreshToken: string) {
 
 export async function AuthGetApi(url: string) {
   const session = await getServerSession(authOptions);
-  console.log("before: ", session?.user.accessToken);
+  console.log("before: ", session?.user.tokens.access_token);
 
   let res = await fetch(BASE_URL + url, {
     method: "GET",
     headers: {
-      Authorization: `bearer ${session?.user.accessToken}`,
+      Authorization: `Bearer ${session?.user.tokens.access_token}`,
     },
   });
 
   if (res.status == 401) {
-    if (session) session.user.accessToken = await refreshToken(session?.user.refreshToken ?? "");
-    console.log("after: ", session?.user.accessToken);
+    if (session)
+      session.user.tokens.access_token = await refreshToken(
+        session?.user?.tokens?.refresh ?? ""
+      );
+    console.log("after: ", session?.user?.tokens?.access_token);
 
     res = await fetch(BASE_URL + url, {
       method: "GET",
       headers: {
-        Authorization: `bearer ${session?.user.accessToken}`,
+        Authorization: `Bearer ${session?.user.tokens.access_token}`,
       },
     });
     return await res.json();

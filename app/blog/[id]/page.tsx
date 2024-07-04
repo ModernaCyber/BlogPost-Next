@@ -22,6 +22,7 @@ interface PostInterface {
   title?: string;
   content?: string;
   author?: string; // Add author field to Post interface
+  comments?: CommentInterface[];
 }
 
 interface CommentInterface {
@@ -29,15 +30,17 @@ interface CommentInterface {
   post?: string;
   author?: string;
   content?: string;
+  created_at?: string;
 }
 
 const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
   const { id } = params;
   const { data: session } = useSession();
   const [post, setPost] = useState<PostInterface | null>(null); // Initialize with null and correct type
-  const [comments, setComments] = useState<CommentInterface[]>([]);
+  // const [comments, setComments] = useState<CommentInterface[]>([]);
   const axiosAuth = useAxiosAuth();
   const [showForm, setShowForm] = useState(false);
+  const [showOptions, setShowOptions] = useState<null | number>(null);
   const router = useRouter();
 
   // console.log(
@@ -48,39 +51,14 @@ const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axiosAuth.get<PostInterface>(`/test/user/1/posts/${id}`);
+        const res = await axiosAuth.get<PostInterface>(`/api/posts/${id}/`);
         setPost(res.data);
-        // setPost({
-        //   title: "newjjj",
-        //   content: "This are my content",
-        //   author: "author",
-        // });
       } catch (error) {
         console.error("Error fetching post:", error);
       }
     };
 
-    const fetchComments = async () => {
-      try {
-        // const res = await axiosAuth.get<Comment[]>(`/api/comments/${id}`);
-        const res = await axiosAuth.get(`/api/comments/${id}`);
-        setComments(res.data);
-        // setComments([
-        //   {
-        //     post: "1",
-        //     content: "This is a comment.",
-        //   },
-        //   {
-        //     post: "1",
-        //     content: "This is a comment.",
-        //   },
-        // ]);
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-    };
     fetchPost();
-    fetchComments();
     // if (session) {
     //   fetchPost();
     //   fetchComments();
@@ -96,6 +74,23 @@ const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
     //   router.push("/login");
     // }
   }, [session, axiosAuth, id, router]);
+
+  const handleDelete = async (commentId?: string) => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
+
+    if (userConfirmed) {
+      try {
+        const response = await axiosAuth.delete(`/api/comments/${commentId}/`);
+        alert("Delete Successful");
+      } catch (error: any) {
+        console.error("Error deleting comment:", error?.message);
+      }
+    } else {
+      console.log("User canceled the delete action");
+    }
+  };
 
   if (!session) {
     return null; // Return null while redirecting
@@ -119,14 +114,16 @@ const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
                 {post?.title}
               </h1>
               <span className="absolute bottom-0 right-0 text-left text-sm text-slate-500">
-              author:{post?.author}
-            </span>
+                author:{post?.author}
+              </span>
             </div>
-            
-            <div>{post?.content}</div>
+
+            <div className="pl-4 pt-10 pb-6 text-left font-normal text-lg w-full overflow-hidden ">
+              {post?.content}
+            </div>
             <div className="py-4 pl-4 text-left flex flex-col items-start">
               <span
-                className=" animate-pulse text-blue-200 text-lg cursor-pointer "
+                className=" animate-pulse text-slate-700 text-lg cursor-pointer "
                 onClick={handleComment}
               >
                 Leave A comment
@@ -139,29 +136,47 @@ const BlogPost: React.FC<BlogPostProps> = ({ params }) => {
               ) : null}
             </div>
             <div className=" flex overflow-x-scroll h-auto w-full px-4 gap-12 ">
-              {comments.length > 0
-                ? comments.map((comment, key) => (
+              {post?.comments && post?.comments.length > 0
+                ? post?.comments.map((comment, key) => (
                     <div
                       key={key}
-                      className="relative w-[320px] h-[200px] border border-slate-500 rounded-md bg-slate-100 p-4 "
+                      className="relative w-[320px] h-[200px] border border-slate-200 rounded-md p-4 overflow-hidden  "
                     >
-                      <div className="w-full absolute inset-0 py-2 px-1">
+                      <div className="w-full absolute inset-0 py-2 px-1 text-xs">
                         {comment?.content}
                       </div>
                       <span className="w-auto absolute bottom-0 right-0 text-xs   ">
                         ...{comment?.author}
                       </span>
-                      {comment?.author === session?.user?.user?.username &&
-                      "a" === "a" ? (
-                        <>
+                      {comment?.author === session?.user?.user?.username ? (
+                        <div className="absolute top-0 right-0 p-1 w-auto h-auto flex">
                           <Button
                             variant="ghost"
-                            className="cursor-pointer z-10 absolute top-0 right-0"
-                            // onClick={handleShow}
+                            className="cursor-pointer bg-white rounded-full w-12  h-12  hover:bg-slate-500 z-10 absolute top-0 right-0 grid place-content-center"
+                            onMouseEnter={() => {
+                              setShowOptions(key);
+                            }}
+                           
                           >
                             <MoreHorizontal className="rotate-90" />
                           </Button>
-                        </>
+                          {showOptions === key ? (
+                            <div
+                            onMouseLeave={()=>{
+                              setShowOptions(null)
+                            }}
+                             className="grid place-content-center overflow-hidden gap-y-1 pl-2  bg-white border border-slate-400 py-4 pr-4 rounded-md absolute top-0 right-0 w-20 h-32">
+                              <button
+                                onClick={() => {
+                                  handleDelete(comment?.id);
+                                }}
+                                className=" text-left w-full text-red-300 hover:bg-gray-200 px-2"
+                              >
+                                Delete
+                              </button>{" "}
+                            </div>
+                          ) : null}
+                        </div>
                       ) : null}
                     </div>
                   ))

@@ -15,8 +15,10 @@ interface BlogFormData {
 }
 
 const CreateBlogForm: React.FC = () => {
+  const { data: session } = useSession();
+
   const [formData, setFormData] = useState<BlogFormData>({
-    author: "",
+    author:session?.user?.user?.username || "",
     img: null,
     title: "",
     content: "",
@@ -24,7 +26,6 @@ const CreateBlogForm: React.FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const axiosAuth = useAxiosAuth();
-  const { data: session } = useSession();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -80,7 +81,7 @@ const CreateBlogForm: React.FC = () => {
           type="text"
           name="author"
           value={formData.author}
-          onChange={handleChange}
+          // onChange={handleChange}
           required
           className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />

@@ -1,79 +1,124 @@
 "use client";
+
 import BlogCard from "components/Blogcard";
 import Wrapper from "components/Wrapper";
 import useAxiosAuth from "lib/hooks/useAxiosAuth";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
+import { Search } from "lucide-react"; // Import the Search icon from lucide-react
 
 interface Post {
-  // Define the structure of a post object
   id?: string;
   img?: string;
   title?: string;
   content?: string;
-  // Add other fields as needed
 }
 
 const HomePage = () => {
   const { data: session } = useSession();
-  const [posts, setPosts] = useState<Post[]>([]); // Initialize with empty array of Post type
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>(""); // State for search query
+  const [currentPage, setCurrentPage] = useState<number>(1); // State for current page
+  const itemsPerPage = 4; // Number of items per page
   const axiosAuth = useAxiosAuth();
   const router = useRouter();
+
   useEffect(() => {
     fetchPost();
-  }, []); // Fetch posts on component mount
+  }, []);
 
   const fetchPost = async () => {
     try {
-      // const res = await axiosAuth.get("/api/posts/");
-      // console.log(res)
-      // setPosts(res.data); // Assuming res.data is an array of posts
-      setPosts([
-        {
-          id: "1",
-          img: "https://example.com/image1.jpg",
-          title: "Sample Post 1",
-          content: "This is the content of sample post 1.",
-        },
-        {
-          id: "2",
-          img: "https://example.com/image2.jpg",
-          title: "Sample Post 2",
-          content: "This is the content of sample post 2.",
-        },
-        {
-          id: "3",
-          img: "https://example.com/image3.jpg",
-          title: "Sample Post 3",
-          content: "This is the content of sample post 3.",
-        },
-        {
-          id: "4",
-          img: "https://example.com/image4.jpg",
-          title: "Sample Post 4",
-          content: "This is the content of sample post 4.",
-        },
-      ]);
+      const res = await axiosAuth.get("/api/posts/");
+      console.log(res);
+      setPosts(res.data);
     } catch (error) {
       console.error("Error fetching posts:", error);
-      setPosts([]); // Handle error by setting posts to empty array
+      setPosts([]);
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredPosts = posts.filter((post) =>
+    post.title?.toLowerCase().match(new RegExp(searchQuery.toLowerCase(), "i"))
+  );
+
+  const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
+
+  const currentPosts = filteredPosts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prevPage) => prevPage - 1);
     }
   };
 
   if (!session) {
     router.push("/login");
   }
+
   return (
     <div className="w-full h-full pt-8">
       <Wrapper>
         {posts.length === 0 ? (
-          <div className="">No blogs at the moment</div>
+          <div>No blogs at the moment</div>
         ) : (
-          <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {posts.map((post, key) => (
-              <BlogCard post={post} key={key} />
-            ))}
+          <div className="flex flex-col w-full h-auto">
+            <div className="mb-4 flex items-center">
+              <Search className="mr-2" />
+              <input
+                type="text"
+                placeholder="Search blogs..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="border border-gray-300 p-2 rounded w-full"
+              />
+            </div>
+            <div className="w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {currentPosts.map((post, key) => (
+                <BlogCard post={post} key={key} />
+              ))}
+            </div>
+            <div className="flex justify-between items-center mt-4">
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 rounded ${
+                  currentPage === 1
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 text-white"
+                }`}
+              >
+                Previous
+              </button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 rounded ${
+                  currentPage === totalPages
+                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 text-white"
+                }`}
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
       </Wrapper>

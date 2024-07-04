@@ -24,6 +24,7 @@ const AppBar = () => {
               <span className="text-sky-300 ">Welcome</span>
               <span className=" text-sky-600">
                 {session?.user?.user?.username}
+                {/* {JSON.stringify(session?.user?.user)}  */}
               </span>
             </p>
             <button className="text-red-500" onClick={() => signOut()}>

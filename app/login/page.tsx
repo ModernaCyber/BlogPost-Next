@@ -19,15 +19,19 @@ const AuthPage: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const { data: session } = useSession();
 
-  // if (session) {
-  //   return (
-  //     <div className="w-full pt-8">
-  //       <Wrapper>
-  //         <>Logged In</>
-  //       </Wrapper>
-  //     </div>
-  //   );
-  // }
+  if (session) {
+    return (
+      <div className="w-full pt-8 flex justify-center items-center min-h-dvh bg-gray-50">
+      <Wrapper>
+        <div className="bg-white p-8 rounded-lg ">
+          <h2 className="text-2xl font-bold text-center text-green-600">
+            You are already logged in {session?.user?.user?.username}
+          </h2>
+        </div>
+      </Wrapper>
+    </div>
+    );
+  }
 
   return (
     <div className="w-full pt-8">
