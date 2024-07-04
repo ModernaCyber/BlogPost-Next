@@ -1,34 +1,37 @@
-```markdown
+````markdown
 # BlogNextJsDjango Frontend
 
-This project is a Next.js frontend application styled with Tailwind CSS and ShadCN, communicating with a Django backend API at `http://localhost:8000`.
+This project was a Next.js frontend application styled with Tailwind CSS and ShadCN, communicating with a Django backend API at `http://localhost:8000`.
 
 ## Setup Instructions
 
 ### Prerequisites
 
-- Node.js (>=14.x)
+- Node.js (>=18.x)
 - npm (>=6.x)
 
 ### Installation
 
-1. **Clone the repository**:
+1. **Cloned the repository**:
    ```sh
    git clone https://github.com/Mohamed-code-marvel/Blog_NextJs_Frontend.git
    cd Blog_NextJs_Frontend
    ```
+````
 
-2. **Install dependencies**:
+2. **Installed dependencies**:
+
    ```sh
    npm install
    ```
 
-3. **Run the development server**:
+3. **Ran the development server**:
+
    ```sh
    npm run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000).
+4. Opened [http://localhost:3000](http://localhost:3000).
 
 ## Project Structure
 
@@ -36,6 +39,7 @@ This project is a Next.js frontend application styled with Tailwind CSS and Shad
 Blog_NextJs_Frontend/
 ├── components/        # Reusable UI components
 ├── pages/             # Next.js pages (routes)
+├── app/               # Next.js pages (routes)
 ├── public/            # Static files
 ├── styles/            # Global and component-specific styles
 ├── utils/             # Utility functions and constants
@@ -54,29 +58,30 @@ Runs the app in development mode at [http://localhost:3000](http://localhost:300
 
 ### `npm run build`
 
-Builds the app for production to the `.next` folder.
+Built the app for production to the `.next` folder.
 
 ### `npm run start`
 
-Starts the application in production mode. Run `npm run build` first.
+Started the application in production mode. Ran `npm run build` first.
 
 ## API Integration
 
-The frontend uses Axios to communicate with the Django backend.
+The frontend used Axios to communicate with the Django backend.
 
 ### Example Axios Request
 
 ```javascript
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000',
-  headers: { 'Content-Type': 'application/json' },
+  baseURL: "http://localhost:8000",
+  headers: { "Content-Type": "application/json" },
 });
 
-api.get('/api/posts/')
-  .then(response => console.log(response.data))
-  .catch(error => console.error(error));
+api
+  .get("/api/posts/")
+  .then((response) => console.log(response.data))
+  .catch((error) => console.error(error));
 ```
 
 ## Styling
@@ -91,17 +96,25 @@ api.get('/api/posts/')
 
 ### Example Authentication Flow
 
-1. **Register**:
+1. **Registered**:
+
    ```javascript
-   api.post('/api/auth/register/', { username: 'exampleUser', password: 'examplePassword' });
+   api.post("/api/auth/register/", {
+     username: "exampleUser",
+     password: "examplePassword",
+   });
    ```
 
-2. **Login**:
+2. **Logged in**:
    ```javascript
-   api.post('/api/auth/login/', { username: 'exampleUser', password: 'examplePassword' })
-     .then(response => {
+   api
+     .post("/api/auth/login/", {
+       username: "exampleUser",
+       password: "examplePassword",
+     })
+     .then((response) => {
        const { access, refresh } = response.data;
-       // Store tokens for authenticated requests
+       // Stored tokens for authenticated requests
      });
    ```
 
@@ -113,8 +126,11 @@ api.get('/api/posts/')
 
 ## Assumptions and Simplifications
 
-- Backend API runs locally at `http://localhost:8000`.
-- JWT tokens for user authentication.
+- Backend API ran locally at `http://localhost:8000`.
+- Used JWT tokens for user authentication.
 
-This project demonstrates a full-stack application with a Next.js frontend and a Django backend, covering user authentication, blog post management, and comment functionality.
+This project demonstrated a full-stack application with a Next.js frontend and a Django backend, covering user authentication, blog post management, and comment functionality.
+
+```
+
 ```
